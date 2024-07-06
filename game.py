@@ -1,5 +1,6 @@
 
 import customtkinter as ctk
+from tkinter import messagebox as msg
 
 class Game(ctk.CTkFrame):
     def __init__(self, master, frame_switch, mode: int):
@@ -10,16 +11,21 @@ class Game(ctk.CTkFrame):
 
         mode: number of letters/attempts
         """
+        self.master = master
         self.mode = mode
         self.guesses = 0
+        
+        self.guess_word = list("MOUSE")
 
-        super().__init__(master)
+        super().__init__(self.master)
 
         CELL_SIZE = 50
 
-        game_frame = ctk.CTkFrame(self, border_color="#2CC985", border_width=2, corner_radius=20)
+        self.GREEN = "#2CC985"
+
+        game_frame = ctk.CTkFrame(self, border_color=self.GREEN, border_width=2, corner_radius=20)
         game_frame.pack()
-        input_frame = ctk.CTkFrame(self, border_color="#2CC985", border_width=2, corner_radius=20)
+        input_frame = ctk.CTkFrame(self, border_color=self.GREEN, border_width=2, corner_radius=20)
         input_frame.pack(pady=(10, 0))
 
         letter_font = ("Helvetica", 36)
@@ -58,7 +64,7 @@ class Game(ctk.CTkFrame):
         menu_btn.pack(pady=10)
 
 
-        master.bind("<KeyPress>", self.key_press)
+        self.master.bind("<KeyPress>", self.key_press)
 
 
 
@@ -108,27 +114,149 @@ class Game(ctk.CTkFrame):
 
 
     def submit_guess(self):
-        
+        """
+        Try to submit the word guess.
+        """
         # Check if all input cells are full
         for i in range(self.mode):
             # One cell is empty => do nothing
             if not self.input_labels[i].cget("text"):
                 return
         
-        # Maximum number of guesses
+        self.show_guess()
+
+
+    def show_guess(self):
+        """
+        Show input word between guesses. Also checks and colors it and checks for game over.
+        """
+        # Last guess
         if self.guesses == self.mode:
-            return
-            
-        # Rewrite the word from the input to the guesses
+            self.last_guess()
+        else:
+            # Check for win
+            guess = [self.input_labels[i].cget("text") for i in range(self.mode)]
+            if guess == self.guess_word:
+                win = True
+            else:
+                win = False
+
+
+            # Guesses specify rows in guess labels matrix
+            # Rewrite correct letters (green)
+            for i in range(self.mode):
+                # Get the letter from the input cell
+                letter = self.input_labels[i].cget("text")
+
+                if win:
+                    self.input_labels[i].configure(text=letter, text_color=self.GREEN)
+                    # Last cycle
+                    if i == self.mode - 1:
+                        word_str = "".join(self.guess_word)           
+                        msg.showinfo("You win", f"You win. The word is {word_str}")
+                        self.master.unbind("<KeyPress>")
+                        return
+                else:
+                    if self.guess_word[i] == letter:
+                        self.guess_labels[self.guesses][i].configure(text=letter, text_color=self.GREEN)
+                    else:
+                        pass
+
+            # Rewrite other letters (yellow and gray)
+            for i in range (self.mode):
+                # Get the letter from the input cell
+                letter = self.input_labels[i].cget("text")
+
+                # Get already written letters
+                written = [self.guess_labels[self.guesses][j].cget("text") for j in range(self.mode)]
+                # Number of actual letter already written
+                num_written = written.count(letter)
+                # Number of actual letter in the original guess word
+                num_guess = self.guess_word.count(letter)
+
+                # Letter is in the word
+                if letter in self.guess_word:
+                    # Letter is at different position
+                    if num_written < num_guess:
+                        self.guess_labels[self.guesses][i].configure(text=letter, text_color="yellow")
+                    # Don't overwrite the correct one
+                    elif self.guess_word[i] == letter:
+                        pass
+                    else:
+                        self.guess_labels[self.guesses][i].configure(text=letter, text_color="gray")
+                # Other letters
+                else:
+                    self.guess_labels[self.guesses][i].configure(text=letter, text_color="gray")
+
+                # Clear the input field
+                self.input_labels[i].configure(text="")
+
+            self.guesses += 1
+
+
+    def last_guess(self):
+        """
+        Handles the last guess in the input field.
+        """
+        guess = [self.input_labels[i].cget("text") for i in range(self.mode)]
+
+        # Clear the input field
         for i in range(self.mode):
-            # Get the letter from the input
-            letter = self.input_labels[i].cget("text")
-            # Empty the input cell
             self.input_labels[i].configure(text="")
-            # Guesses specify row in the guess labels matrix
-            self.guess_labels[self.guesses][i].configure(text=letter)
-
-        self.guesses += 1
-
-            
         
+
+        if guess == self.guess_word:
+            # Rewrite the input in green (win)
+            for i in range(self.mode):
+                # Get the letter from the input cell
+                letter = guess[i]
+
+                self.input_labels[i].configure(text=letter, text_color=self.GREEN)
+                # Last cycle
+                if i == self.mode - 1:   
+                    word_str = "".join(self.guess_word)        
+                    msg.showinfo("You win", f"You win. The word is {word_str}")
+                    self.master.unbind("<KeyPress>")
+
+        # Color the input field and show game over.
+        else:
+            # Rewrite correct letters (green)
+            for i in range(self.mode):
+                # Get the letter from the input cell
+                letter = guess[i]
+
+                if self.guess_word[i] == letter:
+                    self.self.input_labels[i].configure(text=letter, text_color=self.GREEN)
+                else:
+                    pass
+
+            # Rewrite other letters (yellow and gray)
+            for i in range (self.mode):
+                # Get the letter from the input cell
+                letter = guess[i]
+
+                # Get already written letters
+                written = [self.input_labels[j].cget("text") for j in range(self.mode)]
+                # Number of actual letter already written
+                num_written = written.count(letter)
+                # Number of actual letter in the original guess word
+                num_guess = self.guess_word.count(letter)
+
+                # Letter is in the word
+                if letter in self.guess_word:
+                    # Letter is at different position
+                    if num_written < num_guess:
+                        self.input_labels[i].configure(text=letter, text_color="yellow")
+                    # Don't overwrite the correct one
+                    elif self.guess_word[i] == letter:
+                        pass
+                    else:
+                        self.input_labels[i].configure(text=letter, text_color="gray")
+                # Other letters
+                else:
+                    self.input_labels[i].configure(text=letter, text_color="gray")
+
+            word_str = "".join(self.guess_word)
+            msg.showinfo("You lose", f"You lose. Word to guess was: {word_str}.")
+            self.master.unbind("<KeyPress>")
+
