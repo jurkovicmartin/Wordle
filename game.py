@@ -2,8 +2,10 @@
 import customtkinter as ctk
 from tkinter import messagebox as msg
 
+from words import get_random_word
+
 class Game(ctk.CTkFrame):
-    def __init__(self, master, frame_switch, mode: int):
+    def __init__(self, master, frame_switch, mode: int = 5, language: str = "English"):
         """
         Parameters
         -----
@@ -15,7 +17,8 @@ class Game(ctk.CTkFrame):
         self.mode = mode
         self.guesses = 0
         
-        self.guess_word = list("MOUSE")
+        # Get random word -> make it uppercase and split to list
+        self.guess_word = list(get_random_word(self.mode, language).upper())
 
         super().__init__(self.master)
 
@@ -33,7 +36,7 @@ class Game(ctk.CTkFrame):
         # Create matrix for letters and shown the matrix with labels
         self.guess_labels = []
         # Creating two dimensional matrix
-        for row in range(mode):
+        for row in range(5):
             row_labels = []
             for col in range(mode):
                 # Using frame to create a border around each letter
@@ -60,7 +63,7 @@ class Game(ctk.CTkFrame):
             self.input_labels.append(label)
 
 
-        menu_btn = ctk.CTkButton(self, text="Menu", font=("Helvetica", 24), command=lambda: frame_switch("menu"))
+        menu_btn = ctk.CTkButton(self, text="Menu", font=("Helvetica", 24), command=lambda: frame_switch("menu", language=language))
         menu_btn.pack(pady=10)
 
 
@@ -79,6 +82,33 @@ class Game(ctk.CTkFrame):
         # Enter
         elif event.keysym == "Return":
             self.submit_guess()
+        # Other keys
+        else:
+            self.handle_diacritics(event)
+
+    
+    def handle_diacritics(self, event):
+        """
+        Handle input of diacritics of czech diacritics.
+        """
+        if event.keysym == "2":
+            self.write_input_letter("ě")
+        elif event.keysym == "3":
+            self.write_input_letter("š")
+        elif event.keysym == "4":
+            self.write_input_letter("č")
+        elif event.keysym == "5":
+            self.write_input_letter("ř")
+        elif event.keysym == "6":
+            self.write_input_letter("ž")
+        elif event.keysym == "7":
+            self.write_input_letter("ý")
+        elif event.keysym == "8":
+            self.write_input_letter("á")
+        elif event.keysym == "9":
+            self.write_input_letter("í")
+        elif event.keysym == "0":
+            self.write_input_letter("é")
         # Other keys
         else:
             pass

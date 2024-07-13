@@ -15,10 +15,10 @@ class App(ctk.CTk):
 
 
         self.screen = Menu(self, self.switch_frame)
-        self.screen.pack()
+        self.screen.pack(expand=True, fill="both")
 
 
-    def switch_frame(self, display: str, mode: int = None):
+    def switch_frame(self, display: str, mode: int = 5, language: str = "English"):
         """
         Switching between game screens (frames).
 
@@ -32,16 +32,16 @@ class App(ctk.CTk):
         self.screen.destroy()
 
         if display == "menu":
-            self.screen = Menu(self, self.switch_frame)
+            self.screen = Menu(self, self.switch_frame, language=language)
         elif display == "game":
-            self.screen = Game(self, self.switch_frame, mode)
+            self.screen = Game(self, self.switch_frame, mode, language)
         elif display == "help":
             self.screen = Help(self, self.switch_frame)
         else:
             raise Exception("Unexpected error")
         
         # Show new screen
-        self.screen.pack()
+        self.screen.pack(expand=True, fill="both")
 
 
 
