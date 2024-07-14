@@ -5,6 +5,9 @@ from tkinter import messagebox as msg
 
 stanza.download("cs")
 stanza.download("en")
+# Open the pipes at the initialization and keep them open for faster word selecting
+nlp_cs = stanza.Pipeline("cs")
+nlp_en = stanza.Pipeline("en")
 
 def get_random_word(length: int, language: str) -> str:
     """
@@ -56,15 +59,11 @@ def is_noun(word: str, language: str) -> bool:
     """
 
     if language == "English":
-        nlp = stanza.Pipeline("en")
-
-        analyze = nlp(word)
+        analyze = nlp_en(word)
         return analyze.sentences[0].words[0].upos == "NOUN"
     
     elif language == "Czech":
-        nlp = stanza.Pipeline("cs")
-        
-        analyze = nlp(word)
+        analyze = nlp_cs(word)
         # Check for noun and czech "pád"
         return analyze.sentences[0].words[0].upos == "NOUN" and "Case=Nom" in analyze.sentences[0].words[0].feats
     

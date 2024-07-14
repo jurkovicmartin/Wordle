@@ -20,9 +20,12 @@ class Game(ctk.CTkFrame):
         # Get random word -> make it uppercase and split to list
         self.guess_word = list(get_random_word(self.mode, language).upper())
 
+        # print(self.guess_word)
+
         super().__init__(self.master)
 
         CELL_SIZE = 50
+        ATTEMPTS = 5
 
         self.GREEN = "#2CC985"
 
@@ -36,7 +39,7 @@ class Game(ctk.CTkFrame):
         # Create matrix for letters and shown the matrix with labels
         self.guess_labels = []
         # Creating two dimensional matrix
-        for row in range(5):
+        for row in range(ATTEMPTS):
             row_labels = []
             for col in range(mode):
                 # Using frame to create a border around each letter
@@ -206,12 +209,12 @@ class Game(ctk.CTkFrame):
 
                 # Letter is in the word
                 if letter in self.guess_word:
-                    # Letter is at different position
-                    if num_written < num_guess:
-                        self.guess_labels[self.guesses][i].configure(text=letter, text_color="yellow")
                     # Don't overwrite the correct one
-                    elif self.guess_word[i] == letter:
+                    if self.guess_word[i] == letter:
                         pass
+                    # Letter is at different position
+                    elif num_written < num_guess:
+                        self.guess_labels[self.guesses][i].configure(text=letter, text_color="yellow")
                     else:
                         self.guess_labels[self.guesses][i].configure(text=letter, text_color="gray")
                 # Other letters

@@ -25,10 +25,10 @@ class Help(ctk.CTkFrame):
 
         rules = """
         Worde is a word guessing game.\n
-        You have to guess the word in set number of attempts. The words are nouns.\n
+        You have to guess the word in a certain number of attempts. The words are nouns.\n
         You need to type your guest and submit it by hitting "ENTER".\n
-        Letters that will color gray are not involved in the guessing word.\n
-        Letters that will color yellow are involved in the guessing word but at different position.\n
+        Letters that will color gray are not used in the guessing word.\n
+        Letters that will color yellow are used in the guessing word but at different position.\n
         Letters that will color green are correct.
         """
         rules_text = ctk.CTkLabel(frame, text=rules, font=font)
