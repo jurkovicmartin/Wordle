@@ -28,4 +28,4 @@ Word lists were taken from https://github.com/kkrypt0nn/wordlists. Another key c
 
 *Note: Some not totally suitable word could get through the testing.*
 
-*Note: Even for czech language typing english keyboard layout is needed*
+*Note: Even for czech language typing english keyboard layout is needed.*
