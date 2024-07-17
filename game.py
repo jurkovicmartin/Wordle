@@ -1,8 +1,8 @@
 
 import customtkinter as ctk
-from tkinter import messagebox as msg
 
 from words import get_random_word
+from info_window import Info
 
 class Game(ctk.CTkFrame):
     def __init__(self, master, frame_switch, mode: int = 5, language: str = "English"):
@@ -25,7 +25,7 @@ class Game(ctk.CTkFrame):
         super().__init__(self.master)
 
         CELL_SIZE = 50
-        ATTEMPTS = 5
+        self.ATTEMPTS = 5
 
         self.GREEN = "#2CC985"
 
@@ -39,7 +39,7 @@ class Game(ctk.CTkFrame):
         # Create matrix for letters and shown the matrix with labels
         self.guess_labels = []
         # Creating two dimensional matrix
-        for row in range(ATTEMPTS):
+        for row in range(self.ATTEMPTS):
             row_labels = []
             for col in range(mode):
                 # Using frame to create a border around each letter
@@ -164,7 +164,7 @@ class Game(ctk.CTkFrame):
         Show input word between guesses. Also checks and colors it and checks for game over.
         """
         # Last guess
-        if self.guesses == self.mode:
+        if self.guesses == self.ATTEMPTS:
             self.last_guess()
         else:
             # Check for win
@@ -186,7 +186,7 @@ class Game(ctk.CTkFrame):
                     # Last cycle
                     if i == self.mode - 1:
                         word_str = "".join(self.guess_word)           
-                        msg.showinfo("You win", f"You win. The word is {word_str}")
+                        Info(self.master, "win", word_str)
                         self.master.unbind("<KeyPress>")
                         return
                 else:
@@ -248,7 +248,7 @@ class Game(ctk.CTkFrame):
                 # Last cycle
                 if i == self.mode - 1:   
                     word_str = "".join(self.guess_word)        
-                    msg.showinfo("You win", f"You win. The word is {word_str}")
+                    Info(self.master, "win", word_str)
                     self.master.unbind("<KeyPress>")
 
         # Color the input field and show game over.
@@ -259,7 +259,7 @@ class Game(ctk.CTkFrame):
                 letter = guess[i]
 
                 if self.guess_word[i] == letter:
-                    self.self.input_labels[i].configure(text=letter, text_color=self.GREEN)
+                    self.input_labels[i].configure(text=letter, text_color=self.GREEN)
                 else:
                     pass
 
@@ -290,6 +290,6 @@ class Game(ctk.CTkFrame):
                     self.input_labels[i].configure(text=letter, text_color="gray")
 
             word_str = "".join(self.guess_word)
-            msg.showinfo("You lose", f"You lose. Word to guess was: {word_str}.")
+            Info(self.master, "lose", word_str)
             self.master.unbind("<KeyPress>")
 

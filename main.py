@@ -31,6 +31,11 @@ class App(ctk.CTk):
         # Hide original screen
         self.screen.destroy()
 
+        # Close all TopLevel windows (game over windows)
+        for widget in self.winfo_children():
+            if isinstance(widget, ctk.CTkToplevel):
+                widget.destroy()
+
         if display == "menu":
             self.screen = Menu(self, self.switch_frame, language=language)
         elif display == "game":
