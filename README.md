@@ -16,7 +16,7 @@ Green letters are placed correctly.
 - Variant word lengths.
 - You can guess by letters not words (means you can guess by any letters sequence and don't need to guess whole words)
 
-*Note: Czech language doesn't support ď, ť, ň*
+*Note: Czech language doesn't support ď, ť, ň.*
 
 <img src="README_img/menu.png" title="Game menu" alt="Game menu" width=70%>
 
@@ -25,6 +25,8 @@ Green letters are placed correctly.
 Choosing random word is done by selecting a random word from a word list. Selected word is then tested if it is suitable for the game. If not new random word is chosen and tested.
 
 Word lists were taken from https://github.com/kkrypt0nn/wordlists. Another key component of word selecting is Stanza package. With this package testing for suitable nouns is done.
+
+GUI was made with CutomTktnter.
 
 *Note: Some not totally suitable word could get through the testing.*
 
