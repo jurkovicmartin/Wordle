@@ -20,7 +20,7 @@ Green letters are placed correctly.
 
 <img src="README_img/menu.png" title="Game menu" alt="Game menu" width=70%>
 
-# Functionality
+## Functionality
 
 Choosing random word is done by selecting a random word from a word list. Selected word is then tested if it is suitable for the game. If not new random word is chosen and tested.
 
