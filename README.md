@@ -26,7 +26,7 @@ Choosing random word is done by selecting a random word from a word list. Select
 
 Word lists were taken from https://github.com/kkrypt0nn/wordlists. Another key component of word selecting is Stanza package. With this package testing for suitable nouns is done.
 
-GUI was made with CutomTktnter.
+GUI was made with CutomTkinter.
 
 *Note: Some not totally suitable word could get through the testing.*
 
